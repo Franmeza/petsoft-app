@@ -17,9 +17,11 @@ async function Layout({ children }: { children: React.ReactNode }) {
       <div className="bg-[#2C9676] h-[300px] absolute w-full -z-10 top-0" />
       <div className="flex flex-col max-w-[1050px] mx-auto px-5 min-h-screen">
         <AppHeader />
+
         <SearchContextProvider>
           <PetContextProvider data={data}>{children}</PetContextProvider>
         </SearchContextProvider>
+
         <AppFooter />
       </div>
     </>
