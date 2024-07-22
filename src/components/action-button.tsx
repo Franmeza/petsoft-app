@@ -10,11 +10,17 @@ type ActionButtonProps = {
     | "ghost"
     | "link";
   buttonSize?: "default" | "lg" | "sm" | "icon";
+  onClick?: () => void;
 };
 
-function ActionButton({ children, variant, buttonSize }: ActionButtonProps) {
+function ActionButton({
+  children,
+  variant,
+  buttonSize,
+  onClick,
+}: ActionButtonProps) {
   return (
-    <Button variant={variant} size={buttonSize}>
+    <Button variant={variant} size={buttonSize} onClick={onClick}>
       {children}
     </Button>
   );

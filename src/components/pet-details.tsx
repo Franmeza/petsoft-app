@@ -4,7 +4,7 @@ import Image from "next/image";
 import ActionButton from "./action-button";
 
 function PetDetails() {
-  const { selectedPet } = usePetContext();
+  const { selectedPet, handleCheckoutPet } = usePetContext();
 
   return (
     <section className="flex flex-col w-full h-full">
@@ -27,7 +27,12 @@ function PetDetails() {
             </h2>
             <div className="ml-auto space-x-2">
               <ActionButton variant="secondary">Edit</ActionButton>
-              <ActionButton variant="secondary">Checkout</ActionButton>
+              <ActionButton
+                variant="secondary"
+                onClick={() => handleCheckoutPet(selectedPet.id)}
+              >
+                Checkout
+              </ActionButton>
             </div>
           </div>
           <div className="flex justify-around px-5 py-10 text-center">
