@@ -1,6 +1,7 @@
 "use client";
 import usePetContext from "@/app/hooks/usePetContext";
 import Image from "next/image";
+import ActionButton from "./action-button";
 
 function PetDetails() {
   const { selectedPet } = usePetContext();
@@ -24,6 +25,10 @@ function PetDetails() {
             <h2 className="text-3xl font-semibold leading-7 ml-5">
               {selectedPet?.name}
             </h2>
+            <div className="ml-auto space-x-2">
+              <ActionButton variant="secondary">Edit</ActionButton>
+              <ActionButton variant="secondary">Checkout</ActionButton>
+            </div>
           </div>
           <div className="flex justify-around px-5 py-10 text-center">
             <div>
