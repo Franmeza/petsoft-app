@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import ActionButton from "./action-button";
 import { PlusIcon } from "@radix-ui/react-icons";
+import { Dialog, DialogTrigger } from "./ui/dialog";
+import PetForm from "./pet-form";
 
 function PetList() {
   const { pets, selectedPetId, handleChangePetSelectedId } = usePetContext();
@@ -41,9 +43,14 @@ function PetList() {
         ))}
       </ul>
       <div className="absolute bottom-4 right-4">
-        <ActionButton buttonSize="icon">
-          <PlusIcon className="h-6 w-6" />
-        </ActionButton>
+        <Dialog>
+          <DialogTrigger asChild>
+            <ActionButton buttonSize="icon">
+              <PlusIcon className="h-6 w-6" />
+            </ActionButton>
+          </DialogTrigger>
+          <PetForm title="Add new pet" />
+        </Dialog>
       </div>
     </>
   );

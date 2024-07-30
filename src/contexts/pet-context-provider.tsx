@@ -35,6 +35,10 @@ function PetContextProvider({ data, children }: PetContextProviderProps) {
     setPets((prev) => prev.filter((pet) => pet.id !== id));
   };
 
+  const handleAddPet = (newPet: Pet) => {
+    setPets((prev) => [...prev, newPet]);
+  };
+
   return (
     <PetContext.Provider
       value={{
