@@ -15,6 +15,7 @@ type TPetContext = {
   currentGuests: number;
   handleChangePetSelectedId: (id: string) => void;
   handleCheckoutPet: (id: string) => void;
+  handleAddPet: (newPet: Pet) => void;
 };
 
 export const PetContext = createContext<TPetContext | null>(null);
@@ -22,6 +23,7 @@ function PetContextProvider({ data, children }: PetContextProviderProps) {
   //states
   const [pets, setPets] = useState(data);
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
+
   //derived states
   const selectedPet = pets.find((pet) => pet.id === selectedPetId);
   const currentGuests = pets.length;
@@ -35,8 +37,8 @@ function PetContextProvider({ data, children }: PetContextProviderProps) {
     setPets((prev) => prev.filter((pet) => pet.id !== id));
   };
 
-  const handleAddPet = (newPet: Pet) => {
-    setPets((prev) => [...prev, newPet]);
+  const handleAddPet = (newPet: Omit<Pet, "id">) => {
+    setPets((prev) => [...prev, { id: Date.now().toString(), ...newPet }]);
   };
 
   return (
@@ -48,6 +50,7 @@ function PetContextProvider({ data, children }: PetContextProviderProps) {
         currentGuests,
         handleChangePetSelectedId,
         handleCheckoutPet,
+        handleAddPet,
       }}
     >
       {children}

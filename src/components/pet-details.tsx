@@ -4,6 +4,7 @@ import Image from "next/image";
 import ActionButton from "./action-button";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import PetForm from "./pet-form";
+import DialogTriggerComponent from "./dialog-trigger";
 
 function PetDetails() {
   const { selectedPet, handleCheckoutPet } = usePetContext();
@@ -28,13 +29,7 @@ function PetDetails() {
               {selectedPet?.name}
             </h2>
             <div className="ml-auto space-x-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <ActionButton variant="secondary">Edit</ActionButton>
-                </DialogTrigger>
-                <PetForm title="Edit pet information" />
-              </Dialog>
-
+              <DialogTriggerComponent action="Edit" />
               <ActionButton
                 variant="secondary"
                 onClick={() => handleCheckoutPet(selectedPet.id)}

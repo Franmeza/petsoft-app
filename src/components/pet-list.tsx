@@ -3,10 +3,7 @@ import usePetContext from "@/app/hooks/usePetContext";
 import useSearchContext from "@/app/hooks/useSearchContext";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import ActionButton from "./action-button";
-import { PlusIcon } from "@radix-ui/react-icons";
-import { Dialog, DialogTrigger } from "./ui/dialog";
-import PetForm from "./pet-form";
+import DialogTriggerComponent from "./dialog-trigger";
 
 function PetList() {
   const { pets, selectedPetId, handleChangePetSelectedId } = usePetContext();
@@ -43,14 +40,7 @@ function PetList() {
         ))}
       </ul>
       <div className="absolute bottom-4 right-4">
-        <Dialog>
-          <DialogTrigger asChild>
-            <ActionButton buttonSize="icon">
-              <PlusIcon className="h-6 w-6" />
-            </ActionButton>
-          </DialogTrigger>
-          <PetForm title="Add new pet" />
-        </Dialog>
+        <DialogTriggerComponent action="Add" />
       </div>
     </>
   );
