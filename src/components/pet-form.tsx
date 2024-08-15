@@ -21,11 +21,15 @@ type PetFormProps = {
 };
 
 function PetForm({ actionType, onFormSubmssion }: PetFormProps) {
-  const { handleAddPet } = usePetContext();
+  const { handleEditPet, handleAddPet, selectedPet } = usePetContext();
   const { register, handleSubmit } = useForm<Pet>();
 
   const onSubmit: SubmitHandler<Pet> = (data) => {
-    handleAddPet(data);
+    if (actionType === "Add") {
+      handleAddPet(data);
+    } else if (actionType === "Edit") {
+      handleEditPet(selectedPet!.id, data);
+    }
     onFormSubmssion();
   };
   return (
@@ -34,13 +38,23 @@ function PetForm({ actionType, onFormSubmssion }: PetFormProps) {
         <div className="space-y-3">
           <div className="space-y-1">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" type="text" {...register("name")} />
+            <Input
+              id="name"
+              type="text"
+              {...register("name")}
+              defaultValue={actionType === "Edit" ? selectedPet?.name : ""}
+            />
           </div>
           <div className="space-y-1">
             <Label htmlFor="owner Name" className="mt-5">
               Owner Name
             </Label>
-            <Input id="ownerName" type="text" {...register("ownerName")} />
+            <Input
+              id="ownerName"
+              type="text"
+              {...register("ownerName")}
+              defaultValue={actionType === "Edit" ? selectedPet?.ownerName : ""}
+            />
           </div>
           <div className="space-y-1">
             <Label htmlFor="imageUrl">Image Url</Label>
@@ -48,16 +62,26 @@ function PetForm({ actionType, onFormSubmssion }: PetFormProps) {
               id="imageUrl"
               type="text"
               {...register("imageUrl")}
-              defaultValue="https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png"
+              defaultValue={actionType === "Edit" ? selectedPet?.imageUrl : ""}
             />
           </div>
           <div className="space-y-1">
             <Label htmlFor="age">Age</Label>
-            <Input id="age" type="number" {...register("age")} />
+            <Input
+              id="age"
+              type="number"
+              {...register("age")}
+              defaultValue={actionType === "Edit" ? selectedPet?.age : ""}
+            />
           </div>
           <div className="space-y-1">
             <Label htmlFor="notes">Notes</Label>
-            <Textarea id="notes" rows={3} {...register("notes")} />
+            <Textarea
+              id="notes"
+              rows={3}
+              {...register("notes")}
+              defaultValue={actionType === "Edit" ? selectedPet?.notes : ""}
+            />
           </div>
         </div>
 
