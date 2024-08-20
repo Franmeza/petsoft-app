@@ -1,17 +1,13 @@
 import AppFooter from "@/components/app-footer";
 import AppHeader from "@/components/app-header";
+import { Toaster } from "@/components/ui/sonner";
 import PetContextProvider from "@/contexts/pet-context-provider";
 import SearchContextProvider from "@/contexts/search-context-provider";
-import { Pet } from "@/lib/types";
+import prisma from "@/lib/db";
 
 async function Layout({ children }: { children: React.ReactNode }) {
-  const response = await fetch(
-    "https://bytegrad.com/course-assets/projects/petsoft/api/pets"
-  );
-  if (!response.ok) {
-    throw new Error("Could not fetch pets");
-  }
-  const data: Pet[] = await response.json();
+  const pets = await prisma.pet.findMany();
+
   return (
     <>
       <div className="bg-[#2C9676] h-[300px] absolute w-full -z-10 top-0" />
@@ -19,11 +15,12 @@ async function Layout({ children }: { children: React.ReactNode }) {
         <AppHeader />
 
         <SearchContextProvider>
-          <PetContextProvider data={data}>{children}</PetContextProvider>
+          <PetContextProvider data={pets}>{children}</PetContextProvider>
         </SearchContextProvider>
 
         <AppFooter />
       </div>
+      <Toaster position="top-right" />
     </>
   );
 }

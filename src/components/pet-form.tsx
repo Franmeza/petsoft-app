@@ -1,40 +1,36 @@
 "use client";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import usePetContext from "@/app/hooks/usePetContext";
 import { Pet } from "@/lib/types";
+import { addPet } from "@/actions/actions";
+import PetFormBtn from "./pet-form-btn";
+import { toast } from "sonner";
 
-// type Inputs = {
-//   name: string;
-//   age: number;
-//   ownerName: string;
-//   notes: string;
-//   imageUrl: string;
-//   id: string;
-// };
 type PetFormProps = {
   actionType: string;
   onFormSubmssion: () => void;
 };
 
 function PetForm({ actionType, onFormSubmssion }: PetFormProps) {
-  const { handleEditPet, handleAddPet, selectedPet } = usePetContext();
-  const { register, handleSubmit } = useForm<Pet>();
+  const { selectedPet } = usePetContext();
+  const { register } = useForm<Pet>();
 
-  const onSubmit: SubmitHandler<Pet> = (data) => {
-    if (actionType === "Add") {
-      handleAddPet(data);
-    } else if (actionType === "Edit") {
-      handleEditPet(selectedPet!.id, data);
-    }
-    onFormSubmssion();
-  };
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+      <form
+        action={async (formData) => {
+          const error = await addPet(formData);
+          if (error) {
+            toast.warning(error.message);
+            return;
+          }
+          onFormSubmssion();
+        }}
+        className="flex flex-col"
+      >
         <div className="space-y-3">
           <div className="space-y-1">
             <Label htmlFor="name">Name</Label>
@@ -84,10 +80,7 @@ function PetForm({ actionType, onFormSubmssion }: PetFormProps) {
             />
           </div>
         </div>
-
-        <Button className="mt-5 self-end" type="submit">
-          {actionType}
-        </Button>
+        <PetFormBtn actionType={actionType} />
       </form>
     </>
   );
