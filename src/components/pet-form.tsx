@@ -5,7 +5,7 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import usePetContext from "@/app/hooks/usePetContext";
 import { Pet } from "@/lib/types";
-import { addPet } from "@/actions/actions";
+import { addPet, editPet } from "@/actions/actions";
 import PetFormBtn from "./pet-form-btn";
 import { toast } from "sonner";
 
@@ -22,10 +22,18 @@ function PetForm({ actionType, onFormSubmssion }: PetFormProps) {
     <>
       <form
         action={async (formData) => {
-          const error = await addPet(formData);
-          if (error) {
-            toast.warning(error.message);
-            return;
+          if (actionType === "Add") {
+            const error = await addPet(formData);
+            if (error) {
+              toast.warning(error.message);
+              return;
+            }
+          } else if (actionType === "Edit") {
+            const error = await editPet(selectedPet!.id, formData);
+            if (error) {
+              toast.warning(error.message);
+              return;
+            }
           }
           onFormSubmssion();
         }}

@@ -2,12 +2,14 @@
 import usePetContext from "@/app/hooks/usePetContext";
 import Image from "next/image";
 import ActionButton from "./action-button";
-import { Dialog, DialogTrigger } from "./ui/dialog";
-import PetForm from "./pet-form";
 import DialogTriggerComponent from "./dialog-trigger";
+import { deletePet } from "@/actions/actions";
+import { useTransition } from "react";
 
 function PetDetails() {
-  const { selectedPet, handleCheckoutPet } = usePetContext();
+  const { selectedPet } = usePetContext();
+  //useTransition for server actions
+  const [isPending, startTransition] = useTransition();
 
   return (
     <section className="flex flex-col w-full h-full">
@@ -31,8 +33,13 @@ function PetDetails() {
             <div className="ml-auto space-x-2">
               <DialogTriggerComponent action="Edit" />
               <ActionButton
+                disabled={isPending}
                 variant="secondary"
-                onClick={() => handleCheckoutPet(selectedPet.id)}
+                onClick={async () => {
+                  startTransition(async () => {
+                    await deletePet(selectedPet.id);
+                  });
+                }}
               >
                 Checkout
               </ActionButton>

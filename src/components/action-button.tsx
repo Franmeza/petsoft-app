@@ -2,6 +2,7 @@ import { Button } from "./ui/button";
 
 type ActionButtonProps = {
   children: React.ReactNode;
+  disabled?: boolean;
   variant?:
     | "default"
     | "destructive"
@@ -16,11 +17,17 @@ type ActionButtonProps = {
 function ActionButton({
   children,
   variant,
+  disabled,
   buttonSize,
   onClick,
 }: ActionButtonProps) {
   return (
-    <Button variant={variant} size={buttonSize} onClick={onClick}>
+    <Button
+      disabled={disabled}
+      variant={variant}
+      size={buttonSize}
+      onClick={onClick}
+    >
       {children}
     </Button>
   );
