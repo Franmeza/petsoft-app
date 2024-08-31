@@ -9,6 +9,7 @@ import ActionButton from "./action-button";
 import { PlusIcon } from "@radix-ui/react-icons";
 import PetForm from "./pet-form";
 import { useState } from "react";
+import { flushSync } from "react-dom";
 
 function DialogTriggerComponent({ action }: { action: string }) {
   const [isFormOpen, setIsFormOpen] = useState(false);

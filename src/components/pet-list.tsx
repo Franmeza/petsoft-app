@@ -6,10 +6,11 @@ import Image from "next/image";
 import DialogTriggerComponent from "./dialog-trigger";
 
 function PetList() {
-  const { pets, selectedPetId, handleChangePetSelectedId } = usePetContext();
+  const { optimisticPets, selectedPetId, handleChangePetSelectedId } =
+    usePetContext();
   const { petSearch } = useSearchContext();
 
-  const FilteredPets = pets.filter((pet) =>
+  const FilteredPets = optimisticPets.filter((pet) =>
     pet.name.toLowerCase().includes(petSearch)
   );
 

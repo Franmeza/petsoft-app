@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Button } from "./ui/button";
 
 type ActionButtonProps = {
@@ -14,23 +15,20 @@ type ActionButtonProps = {
   onClick?: () => void;
 };
 
-function ActionButton({
-  children,
-  variant,
-  disabled,
-  buttonSize,
-  onClick,
-}: ActionButtonProps) {
-  return (
-    <Button
-      disabled={disabled}
-      variant={variant}
-      size={buttonSize}
-      onClick={onClick}
-    >
-      {children}
-    </Button>
-  );
-}
+const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
+  ({ children, variant, disabled, buttonSize, onClick }, ref) => {
+    return (
+      <Button
+        ref={ref}
+        disabled={disabled}
+        variant={variant}
+        size={buttonSize}
+        onClick={onClick}
+      >
+        {children}
+      </Button>
+    );
+  }
+);
 
 export default ActionButton;

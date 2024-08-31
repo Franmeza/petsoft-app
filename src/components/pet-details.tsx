@@ -7,9 +7,8 @@ import { deletePet } from "@/actions/actions";
 import { useTransition } from "react";
 
 function PetDetails() {
-  const { selectedPet } = usePetContext();
+  const { selectedPet, handleDeletePet } = usePetContext();
   //useTransition for server actions
-  const [isPending, startTransition] = useTransition();
 
   return (
     <section className="flex flex-col w-full h-full">
@@ -33,13 +32,8 @@ function PetDetails() {
             <div className="ml-auto space-x-2">
               <DialogTriggerComponent action="Edit" />
               <ActionButton
-                disabled={isPending}
                 variant="secondary"
-                onClick={async () => {
-                  startTransition(async () => {
-                    await deletePet(selectedPet.id);
-                  });
-                }}
+                onClick={async () => await handleDeletePet(selectedPet.id)}
               >
                 Checkout
               </ActionButton>
