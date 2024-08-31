@@ -4,8 +4,8 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import usePetContext from "@/app/hooks/usePetContext";
-import { Pet } from "@/lib/types";
 import PetFormBtn from "./pet-form-btn";
+import { PetEssentials } from "@/lib/types";
 
 type PetFormProps = {
   actionType: string;
@@ -14,7 +14,7 @@ type PetFormProps = {
 
 function PetForm({ actionType, onFormSubmssion }: PetFormProps) {
   const { selectedPet, handleAddPet, handleEditPet } = usePetContext();
-  const { register } = useForm<Pet>();
+  const { register } = useForm<PetEssentials>();
 
   return (
     <>
