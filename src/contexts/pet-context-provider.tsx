@@ -26,8 +26,21 @@ function PetContextProvider({ data, children }: PetContextProviderProps) {
   //states
   const [optimisticPets, setOptimisticData] = useOptimistic(
     data,
-    (state, newPet) => {
-      return [...state, { ...newPet, id: crypto.randomUUID() }];
+    (state, { action, payload }) => {
+      switch (action) {
+        case "add":
+          return [...state, payload];
+        case "edit":
+          return state.map((pet) =>
+            pet.id === payload.selectedPetId
+              ? { ...pet, ...payload.newPetData }
+              : pet
+          );
+        case "delete":
+          return state.filter((pet) => pet.id !== payload);
+        default:
+          return state;
+      }
     }
   );
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
@@ -42,7 +55,7 @@ function PetContextProvider({ data, children }: PetContextProviderProps) {
   };
 
   const handleAddPet = async (newPet: Omit<Pet, "id">) => {
-    setOptimisticData(newPet);
+    setOptimisticData({ action: "add", payload: newPet });
     const error = await addPet(newPet);
     if (error) {
       toast.warning(error.message);
@@ -54,20 +67,26 @@ function PetContextProvider({ data, children }: PetContextProviderProps) {
     selectedPetId: string,
     newPetData: Omit<Pet, "id">
   ) => {
+    setOptimisticData({
+      action: "edit",
+      payload: { selectedPetId, newPetData },
+    });
+    // Call the editPet function with the selectedPetId and newPetData
     const error = await editPet(selectedPetId, newPetData);
     if (error) {
       toast.warning(error.message);
       return;
     }
-    setOptimisticData((prev) =>
-      prev.map((pet) =>
-        pet.id === selectedPetId ? { ...pet, ...newPetData } : pet
-      )
-    );
   };
 
   const handleDeletePet = async (petId: string) => {
-    await deletePet(petId);
+    setOptimisticData({ action: "delete", payload: petId });
+    const error = await deletePet(petId);
+    if (error) {
+      toast.warning(error.message);
+      return;
+    }
+    // Reset the selected pet ID
     setSelectedPetId(null);
   };
   return (

@@ -6,8 +6,8 @@ import { Pet } from "@/lib/types";
 
 export async function addPet(newPet: Omit<Pet, "id">) {
   // Perform server-side logic
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   try {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
     await prisma.pet.create({
       data: newPet,
     });

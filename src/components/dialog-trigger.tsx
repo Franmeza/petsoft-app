@@ -33,7 +33,11 @@ function DialogTriggerComponent({ action }: { action: string }) {
         </DialogHeader>
         <PetForm
           actionType={action}
-          onFormSubmssion={() => setIsFormOpen(false)}
+          onFormSubmssion={() =>
+            flushSync(() => {
+              setIsFormOpen(false);
+            })
+          }
         />
       </DialogContent>
     </Dialog>

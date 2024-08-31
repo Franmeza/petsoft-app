@@ -3,12 +3,9 @@ import usePetContext from "@/app/hooks/usePetContext";
 import Image from "next/image";
 import ActionButton from "./action-button";
 import DialogTriggerComponent from "./dialog-trigger";
-import { deletePet } from "@/actions/actions";
-import { useTransition } from "react";
 
 function PetDetails() {
   const { selectedPet, handleDeletePet } = usePetContext();
-  //useTransition for server actions
 
   return (
     <section className="flex flex-col w-full h-full">
