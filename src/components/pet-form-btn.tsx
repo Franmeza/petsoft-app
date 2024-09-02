@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 
 function PetFormBtn({ actionType }: { actionType: string }) {
   return (
-    <Button className="mt-5 self-end" type="submit">
+    <Button type="submit" className="mt-5 self-end">
       {actionType}
     </Button>
   );
