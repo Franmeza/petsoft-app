@@ -38,7 +38,8 @@ const config = {
   ],
   callbacks: {
     authorized: ({ auth, request }) => {
-      const isLoggedIn = auth?.user;
+      const isLoggedIn = Boolean(auth?.user);
+
       const isTryingToAccessProtectedRoute =
         request.nextUrl.pathname.includes("/app");
 
@@ -50,4 +51,4 @@ const config = {
     },
   },
 } satisfies NextAuthConfig;
-export const { auth, signIn } = NextAuth(config);
+export const { auth, signIn, signOut } = NextAuth(config);
