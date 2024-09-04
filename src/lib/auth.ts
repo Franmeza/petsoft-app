@@ -47,7 +47,13 @@ const config = {
 
       if (isLoggedIn && isTryingToAccessProtectedRoute) return true;
 
-      if (!isTryingToAccessProtectedRoute) return true;
+      if (isLoggedIn && !isTryingToAccessProtectedRoute)
+        return Response.redirect(new URL("/app/dashboard", request.url));
+
+      if (!isLoggedIn && !isTryingToAccessProtectedRoute) {
+        return true;
+      }
+      return false;
     },
   },
 } satisfies NextAuthConfig;

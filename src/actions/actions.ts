@@ -6,13 +6,23 @@ import { PetEssentials } from "@/lib/types";
 import { petFormSchema } from "@/lib/validations";
 import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
 
 // --- user actions ---
 
-export async function login(formData: FormData) {
-  const authData = Object.fromEntries(formData.entries());
+export async function signUp(formData: FormData) {
+  const password = await bcrypt.hash(formData.get("password") as string, 10);
+  await prisma.user.create({
+    data: {
+      email: formData.get("email") as string,
+      hashedPassword: password,
+    },
+  });
+  await signIn("credentials", formData);
+}
 
-  await signIn("credentials", authData);
+export async function login(formData: FormData) {
+  await signIn("credentials", formData);
 }
 
 export async function logout() {

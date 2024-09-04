@@ -7,7 +7,7 @@ function Singup() {
   return (
     <main>
       <H1 className="text-center mb-5">Sign Up</H1>
-      <AuthForm action="Sign Up" />
+      <AuthForm action="signUp" />
       <p className="mt-6  text-sm text-zinc-500">
         Already have an account?{" "}
         <Link href="/login" className=" font-medium  hover:text-blue-500">

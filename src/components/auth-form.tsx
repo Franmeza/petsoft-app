@@ -1,15 +1,18 @@
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { login } from "@/actions/actions";
+import { login, signUp } from "@/actions/actions";
 
 type AuthFormProps = {
-  action: "Sign Up" | "Log In";
+  action: "signUp" | "logIn";
 };
 
 function AuthForm({ action }: AuthFormProps) {
   return (
-    <form className="min-w-[250px]" action={login}>
+    <form
+      className="min-w-[250px]"
+      action={action === "logIn" ? login : signUp}
+    >
       <div className="space-y-1 mb-2">
         <Label>Email</Label>
         <Input
@@ -29,7 +32,7 @@ function AuthForm({ action }: AuthFormProps) {
         />
       </div>
       <Button className="mt-4" type="submit">
-        {action}
+        {action === "logIn" ? "Log In" : "Sign Up"}
       </Button>
     </form>
   );
