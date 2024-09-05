@@ -1,12 +1,14 @@
 "use server";
 
-import { signIn, signOut } from "@/lib/auth";
+import { auth, signIn, signOut } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { PetEssentials } from "@/lib/types";
 import { petFormSchema } from "@/lib/validations";
 import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
+import { redirect } from "next/navigation";
+import { checkAuth } from "@/lib/server-utils";
 
 // --- user actions ---
 
@@ -32,9 +34,9 @@ export async function logout() {
 // --- pet actions ---
 
 export async function addPet(newPet: PetEssentials) {
-  // Perform server-side logic
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
+  // authentication check
+  const session = await checkAuth();
+  //validations
   const validatedPetData = petFormSchema.safeParse(newPet);
 
   if (!validatedPetData.success) {
@@ -45,7 +47,14 @@ export async function addPet(newPet: PetEssentials) {
   // Save the new pet to the database
   try {
     await prisma.pet.create({
-      data: validatedPetData.data,
+      data: {
+        ...validatedPetData.data,
+        user: {
+          connect: {
+            id: session.user.id,
+          },
+        },
+      },
     });
   } catch (error) {
     return {
@@ -57,10 +66,28 @@ export async function addPet(newPet: PetEssentials) {
 }
 
 export async function editPet(petId: Pet["id"], newPetData: PetEssentials) {
+  // authentication check
+  const session = await checkAuth();
+  //validations
   const validatedPetData = petFormSchema.safeParse(newPetData);
   if (!validatedPetData.success) {
     return {
       message: "Invalid pet data",
+    };
+  }
+  //authorization check
+  const pet = await prisma.pet.findUnique({
+    where: { id: petId },
+    select: { userId: true },
+  });
+  if (!pet) {
+    return {
+      message: "Pet not found",
+    };
+  }
+  if (pet.userId !== session.user.id) {
+    return {
+      message: "You are not authorized to edit this pet",
     };
   }
   // Update the pet in the database
@@ -78,8 +105,25 @@ export async function editPet(petId: Pet["id"], newPetData: PetEssentials) {
 }
 
 export async function deletePet(petId: Pet["id"]) {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  //authentication check
+  const session = await checkAuth();
+  //authorization check
+  const pet = await prisma.pet.findUnique({
+    where: { id: petId },
+    select: { userId: true },
+  });
+  if (!pet) {
+    return {
+      message: "Pet not found",
+    };
+  }
+  if (pet.userId !== session.user.id) {
+    return {
+      message: "You are not authorized to delete this pet",
+    };
+  }
 
+  // Delete the pet from the database
   try {
     await prisma.pet.delete({
       where: { id: petId },
