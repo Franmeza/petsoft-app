@@ -1,37 +1,11 @@
 "use server";
 
-import { auth, signIn, signOut } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { PetEssentials } from "@/lib/types";
 import { petFormSchema } from "@/lib/validations";
 import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import bcrypt from "bcryptjs";
-import { redirect } from "next/navigation";
 import { checkAuth } from "@/lib/server-utils";
-
-// --- user actions ---
-
-export async function signUp(formData: FormData) {
-  const password = await bcrypt.hash(formData.get("password") as string, 10);
-  await prisma.user.create({
-    data: {
-      email: formData.get("email") as string,
-      hashedPassword: password,
-    },
-  });
-  await signIn("credentials", formData);
-}
-
-export async function login(formData: FormData) {
-  await signIn("credentials", formData);
-}
-
-export async function logout() {
-  await signOut({ redirectTo: "/" });
-}
-
-// --- pet actions ---
 
 export async function addPet(newPet: PetEssentials) {
   // authentication check
@@ -122,7 +96,6 @@ export async function deletePet(petId: Pet["id"]) {
       message: "You are not authorized to delete this pet",
     };
   }
-
   // Delete the pet from the database
   try {
     await prisma.pet.delete({

@@ -1,7 +1,7 @@
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { login, signUp } from "@/actions/actions";
+import { login, signUp } from "@/actions/user-actions";
 
 type AuthFormProps = {
   action: "signUp" | "logIn";

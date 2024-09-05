@@ -1,5 +1,5 @@
 "use client";
-import { logout } from "@/actions/actions";
+import { logout } from "@/actions/user-actions";
 import { Button } from "./ui/button";
 
 function SignOutBtn() {
