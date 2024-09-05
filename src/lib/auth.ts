@@ -55,6 +55,19 @@ const config = {
       }
       return false;
     },
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.userId = user.id;
+      }
+      return token;
+    },
+    session: ({ session, token }) => {
+      if (session.user) {
+        session.user.id = token.userId as string;
+      }
+
+      return session;
+    },
   },
 } satisfies NextAuthConfig;
 export const { auth, signIn, signOut } = NextAuth(config);
