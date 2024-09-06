@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { DEFAULT_PET_IMAGE } from "./constants";
 
 export const petFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -14,7 +13,8 @@ export const petFormSchema = z.object({
     .positive({ message: "Age must be a positive number" }),
   notes: z.union([z.literal(""), z.string().trim().max(1000)]),
 });
-//   .transform((data) => ({
-//     ...data,
-//     imageUrl: data.imageUrl || DEFAULT_PET_IMAGE,
-//   }));
+
+export const authSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
