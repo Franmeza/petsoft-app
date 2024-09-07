@@ -4,6 +4,7 @@ import { signIn, signOut } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/db";
 import { authSchema } from "@/lib/validations";
+import { Prisma } from "@prisma/client";
 
 export async function signUp(formData: unknown) {
   //check if formData is valid
@@ -25,12 +26,25 @@ export async function signUp(formData: unknown) {
   const { email, password } = validatedData.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.user.create({
-    data: {
-      email,
-      hashedPassword,
-    },
-  });
+  try {
+    await prisma.user.create({
+      data: {
+        email,
+        hashedPassword,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return {
+          message: "User already exists",
+        };
+      }
+    }
+    return {
+      message: "Something went wrong",
+    };
+  }
 
   await signIn("credentials", formData);
 }
