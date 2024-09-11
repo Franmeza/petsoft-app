@@ -5,6 +5,7 @@ import { checkAuth } from "@/lib/server-utils";
 
 async function Account() {
   const session = await checkAuth();
+
   return (
     <main>
       <H1 className="text-white my-8">Your account</H1>

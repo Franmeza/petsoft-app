@@ -5,8 +5,9 @@ import bcrypt from "bcryptjs";
 import prisma from "@/lib/db";
 import { authSchema } from "@/lib/validations";
 import { Prisma } from "@prisma/client";
+import { AuthError } from "next-auth";
 
-export async function signUp(formData: unknown) {
+export async function signUp(prevState: unknown, formData: unknown) {
   //check if formData is valid
   if (!(formData instanceof FormData)) {
     return {
@@ -49,13 +50,30 @@ export async function signUp(formData: unknown) {
   await signIn("credentials", formData);
 }
 
-export async function logIn(formData: unknown) {
+export async function logIn(prevState: unknown, formData: unknown) {
   if (!(formData instanceof FormData)) {
     return {
       message: "Invalid form data",
     };
   }
-  await signIn("credentials", formData);
+
+  try {
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return {
+            message: "Invalid credentials",
+          };
+        default:
+          return {
+            message: "Error. Could not log in",
+          };
+      }
+    }
+    throw error; //nextjs redirects throws error, so we need to rethrow it
+  }
 }
 
 export async function logout() {

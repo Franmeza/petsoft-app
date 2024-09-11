@@ -16,7 +16,6 @@ const config = {
         if (!parsedCredentials.success) {
           return null;
         }
-        console.log(parsedCredentials);
         //get the email and password
         const { email, password } = parsedCredentials.data;
         //check if the user exists
