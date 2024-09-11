@@ -54,8 +54,15 @@ const config = {
 
       if (isLoggedIn && isTryingToAccessProtectedRoute) return true;
 
-      if (isLoggedIn && !isTryingToAccessProtectedRoute)
-        return Response.redirect(new URL("/app/dashboard", request.url));
+      if (isLoggedIn && !isTryingToAccessProtectedRoute) {
+        if (
+          request.nextUrl.pathname.includes("/login") ||
+          request.nextUrl.pathname.includes("/signup")
+        ) {
+          return Response.redirect(new URL("/payment", request.url));
+        }
+        return true;
+      }
 
       if (!isLoggedIn && !isTryingToAccessProtectedRoute) {
         return true;
