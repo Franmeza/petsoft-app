@@ -30,5 +30,6 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
     );
   }
 );
-
+//For production to be reconognized as a named function
+ActionButton.displayName = "ActionButton";
 export default ActionButton;
