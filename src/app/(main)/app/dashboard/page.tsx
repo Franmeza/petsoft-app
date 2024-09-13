@@ -21,7 +21,7 @@ async function Dashboard() {
             <PetList />
           </ContentBlock>
         </div>
-        <div className=" md:row-start-1 md:row-span-full md:col-start-2 md:col-span-full">
+        <div className="flex-grow overflow-y-auto md:row-start-1 md:row-span-full md:col-start-2 md:col-span-full">
           <ContentBlock>
             <PetDetails />
           </ContentBlock>

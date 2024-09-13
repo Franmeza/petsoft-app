@@ -21,11 +21,9 @@ async function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex flex-col max-w-[1050px] mx-auto px-5 min-h-screen ">
         <AppHeader />
 
-        <div className="flex-grow overflow-y-scroll">
-          <SearchContextProvider>
-            <PetContextProvider data={pets}>{children}</PetContextProvider>
-          </SearchContextProvider>
-        </div>
+        <SearchContextProvider>
+          <PetContextProvider data={pets}>{children}</PetContextProvider>
+        </SearchContextProvider>
 
         <AppFooter />
       </div>
