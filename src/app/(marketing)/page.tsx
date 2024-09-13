@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <main className="flex sm:flex-col lg:flex-row items-center justify-center bg-[#5DC9A8] min-h-screen gap-10">
+    <main className="flex flex-col lg:flex-row items-center justify-center bg-[#5DC9A8] min-h-screen gap-10 p-6">
       <Image
         src="https://bytegrad.com/course-assets/react-nextjs/petsoft-preview.png"
         alt="Preview of member Dashboard"

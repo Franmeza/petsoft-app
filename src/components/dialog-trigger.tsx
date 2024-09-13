@@ -25,7 +25,7 @@ function DialogTriggerComponent({ action }: { action: string }) {
           <ActionButton variant="secondary">Edit</ActionButton>
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[360px] md:max-w-lg">
         <DialogHeader>
           <DialogTitle>
             {action === "Add" ? "Add new pet" : "Edit Pet Information"}

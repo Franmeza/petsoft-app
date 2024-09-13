@@ -15,7 +15,7 @@ function PetDetails() {
         </p>
       ) : (
         <>
-          <div className="flex items-center bg-white px-8 py-5 border-b border-light">
+          <div className="flex flex-col  sm:flex-row items-center bg-white px-8 py-5 border-b border-light">
             <Image
               src={selectedPet?.imageUrl}
               alt="Selected pet image"
@@ -26,7 +26,7 @@ function PetDetails() {
             <h2 className="text-3xl font-semibold leading-7 ml-5">
               {selectedPet.name}
             </h2>
-            <div className="ml-auto space-x-2">
+            <div className="sm:ml-auto mt-2 space-x-2">
               <DialogTriggerComponent action="Edit" />
               <ActionButton
                 variant="secondary"
