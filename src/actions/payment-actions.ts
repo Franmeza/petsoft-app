@@ -23,5 +23,6 @@ export default async function createCheckoutSession() {
     success_url: `${process.env.BASE_URL}/payment?success=true`,
     cancel_url: `${process.env.BASE_URL}/payment?cancelled=true`,
   });
+
   redirect(checkoutSesssion.url);
 }

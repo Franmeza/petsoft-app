@@ -1,11 +1,16 @@
-import { JWT } from "next-auth/jwt";
 import { User } from "next-auth";
-declare module "next-auth/core/jwt" {
+declare module "@auth/core/jwt" {
   interface JWT {
     userId: string;
+    email: string;
+    isSuscribed: boolean;
   }
 }
 declare module "next-auth" {
+  interface User {
+    email: string;
+    isSuscribed: boolean;
+  }
   interface Session {
     user: User & {
       id: string;

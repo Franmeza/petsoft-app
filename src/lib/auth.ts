@@ -47,38 +47,67 @@ const config = {
     authorized: ({ auth, request }) => {
       const isLoggedIn = Boolean(auth?.user);
 
-      const isTryingToAccessProtectedRoute =
-        request.nextUrl.pathname.includes("/app");
+      const isTryingToAccessApp = request.nextUrl.pathname.includes("/app");
 
-      if (isTryingToAccessProtectedRoute && !isLoggedIn) return false;
+      if (!isLoggedIn && isTryingToAccessApp) {
+        return false;
+      }
 
-      if (isLoggedIn && isTryingToAccessProtectedRoute) return true;
+      if (isLoggedIn && isTryingToAccessApp && !auth?.user.isSuscribed) {
+        return Response.redirect(new URL("/payment", request.nextUrl));
+      }
 
-      if (isLoggedIn && !isTryingToAccessProtectedRoute) {
+      if (isLoggedIn && isTryingToAccessApp && auth?.user.isSuscribed) {
+        return true;
+      }
+
+      if (
+        isLoggedIn &&
+        (request.nextUrl.pathname.includes("/login") ||
+          request.nextUrl.pathname.includes("/signup")) &&
+        auth?.user.isSuscribed
+      ) {
+        return Response.redirect(new URL("/app/dashboard", request.nextUrl));
+      }
+      if (isLoggedIn && !isTryingToAccessApp && !auth?.user.isSuscribed) {
         if (
           request.nextUrl.pathname.includes("/login") ||
           request.nextUrl.pathname.includes("/signup")
         ) {
-          return Response.redirect(new URL("/payment", request.url));
+          return Response.redirect(new URL("/payment", request.nextUrl));
         }
+
         return true;
       }
 
-      if (!isLoggedIn && !isTryingToAccessProtectedRoute) {
+      if (!isLoggedIn && !isTryingToAccessApp) {
         return true;
       }
+
       return false;
     },
-    jwt: ({ token, user }) => {
+    jwt: async ({ token, user, trigger }) => {
+      //on sign in
       if (user) {
         token.userId = user.id;
+        token.email = user.email!;
+        token.isSuscribed = user.isSuscribed;
+      }
+      if (trigger === "update") {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: token.email,
+          },
+        });
+        if (user) {
+          token.isSuscribed = user.isSuscribed;
+        }
       }
       return token;
     },
-    session: ({ session, token }) => {
-      if (session.user) {
-        session.user.id = token.userId as string;
-      }
+    session: async ({ session, token }) => {
+      session.user.id = token.userId;
+      session.user.isSuscribed = token.isSuscribed;
 
       return session;
     },
