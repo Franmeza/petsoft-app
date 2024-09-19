@@ -89,7 +89,7 @@ const config = {
     jwt: async ({ token, user, trigger }) => {
       //on sign in
       if (user) {
-        token.userId = user.id;
+        token.userId = user.id!;
         token.email = user.email!;
         token.isSuscribed = user.isSuscribed;
       }
