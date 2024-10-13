@@ -1,7 +1,8 @@
 import "server-only";
-
+import prisma from "./db";
 import { redirect } from "next/navigation";
-import { auth } from "./auth";
+import { User } from "@prisma/client";
+import { auth } from "./auth-no-edge";
 
 export async function checkAuth() {
   const session = await auth();
@@ -10,4 +11,12 @@ export async function checkAuth() {
     redirect("/login");
   }
   return session;
+}
+export async function getUserByEmail(email: User["email"]) {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+  return user;
 }
