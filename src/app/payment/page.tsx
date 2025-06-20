@@ -28,7 +28,11 @@ function Payment({
           alt="PetSoft logo"
         />
         <main>
-          <H1 className="mb-10">PetSoft access requires payment</H1>
+          <H1 className="mb-10">
+            {searchParams.success
+              ? "Payment successful"
+              : "PetSoft access requires payment"}
+          </H1>
         </main>
         {searchParams.success && (
           <Button
