@@ -51,7 +51,9 @@ function Payment({
               });
             }}
           >
-            {isPending ? "Loading..." : "Buy lifetime access for $299"}
+            {isPending
+              ? "Loading..."
+              : "Buy lifetime access for $299 (this is stripe test mode account)"}
           </Button>
         )}
       </div>
